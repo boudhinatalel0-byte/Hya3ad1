@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boudhina Sell | WhatsApp Edition</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FFD700;
+            --whatsapp: #25D366;
+            --bg: #0b0b0b;
+            --card: #161616;
+            --text: #ffffff;
+            --text-muted: #a0a0a0;
+            --nav-bg: rgba(10, 10, 10, 0.98);
+            --input-bg: #1f1f1f;
+        }
+
+        .light-mode {
+            --bg: #f5f6f7;
+            --card: #ffffff;
+            --text: #1a1a1a;
+            --text-muted: #666;
+            --nav-bg: rgba(255, 255, 255, 0.98);
+            --input-bg: #f0f0f0;
+        }
+
+        body {
+            margin: 0; font-family: 'Cairo', sans-serif;
+            background: var(--bg); color: var(--text);
+            transition: 0.3s; padding-bottom: 90px;
+        }
+
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 20px; background: var(--nav-bg); position: sticky; top: 0; z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .brand { font-weight: 800; font-size: 22px; color: var(--primary); width: 100%; text-align: center; }
+
+        .slider-container { margin: 15px; border-radius: 20px; overflow: hidden; height: 160px; position: relative; }
+        .slider { display: flex; height: 100%; transition: 0.5s; }
+        .slide { min-width: 100%; background-size: cover; background-position: center; display: flex; align-items: flex-end; padding: 15px; box-sizing: border-box;}
+        .slide-txt { background: rgba(0,0,0,0.7); padding: 5px 12px; border-radius: 8px; font-size: 13px; font-weight: bold; border-right: 3px solid var(--primary); }
+
+        .section { display: none; padding: 10px 20px; max-width: 600px; margin: auto; animation: fadeIn 0.4s; }
+        .active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .search-box { position: relative; margin-bottom: 20px; }
+        .search-box i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+        .search-box input { width: 100%; padding: 12px 40px 12px 15px; border-radius: 15px; border: none; background: var(--input-bg); color: var(--text); outline: none; box-sizing: border-box; }
+
+        .card { background: var(--card); border-radius: 25px; overflow: hidden; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .card-img { width: 100%; height: 220px; object-fit: cover; }
+        .card-content { padding: 15px; }
+        .price { color: var(--primary); font-weight: 800; font-size: 18px; }
+
+        .btn-main { background: var(--primary); color: #000; padding: 15px; border: none; border-radius: 15px; width: 100%; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 16px; transition: 0.2s; }
+        .btn-wa { background: var(--whatsapp); color: #fff; margin-top: 10px; }
+        .btn-main:active { transform: scale(0.97); }
+
+        .nav {
+            position: fixed; bottom: 0; width: 100%; height: 75px;
+            background: var(--nav-bg); display: flex; justify-content: space-around; align-items: center;
+            border-top: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(10px);
+        }
+        .nav-btn { background: none; border: none; color: #666; font-size: 24px; cursor: pointer; transition: 0.3s; position: relative; }
+        .nav-btn.active-link { color: var(--primary); }
+
+        .upload-area { width: 100%; height: 150px; background: var(--input-bg); border: 2px dashed #444; border-radius: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; overflow: hidden; position: relative; margin-bottom: 10px;}
+        .upload-area img { width: 100%; height: 100%; object-fit: cover; position: absolute; }
+
+        input, textarea, select { width: 100%; padding: 15px; margin: 8px 0; border-radius: 15px; border: none; background: var(--input-bg); color: var(--text); box-sizing: border-box; font-family: 'Cairo'; }
+        
+        #auth-screen { position: fixed; inset: 0; background: #000; z-index: 2000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px; text-align: center; }
+    </style>
+</head>
+<body class="dark-mode">
+
+    <div id="auth-screen">
+        <i class="fa-solid fa-bolt" style="font-size: 50px; color: var(--primary); margin-bottom: 15px;"></i>
+        <h1 style="margin:0; font-weight: 800; letter-spacing: 1px;">Boudhina Sell</h1>
+        <p id="t-auth-sub" style="color: #666; margin-bottom: 30px;">سوق اللاعبين الأسرع في تونس</p>
+        <input type="text" id="reg-name" placeholder="الاسم المستعار">
+        <input type="email" id="reg-email" placeholder="البريد الإلكتروني">
+        <button class="btn-main" onclick="register()" id="t-start-btn">ابدأ الآن</button>
+    </div>
+
+    <header>
+        <div class="brand">Boudhina Sell</div>
+    </header>
+
+    <div id="home" class="section active">
+        <div class="slider-container">
+            <div class="slider" id="mainSlider">
+                <div class="slide" style="background-image: linear-gradient(transparent, #000), url('https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500')">
+                    <div class="slide-txt" id="t-slide1">ضمان 100% على جميع الحسابات</div>
+                </div>
+                <div class="slide" style="background-image: linear-gradient(transparent, #000), url('https://images.unsplash.com/photo-1511512578047-dfb367046420?w=500')">
+                    <div class="slide-txt" id="t-slide2">تواصل مباشر وسريع عبر واتساب</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="search-box">
+            <i class="fa-solid fa-search"></i>
+            <input type="text" id="searchInput" onkeyup="searchPosts()" placeholder="ابحث عن لعبة أو حساب...">
+        </div>
+
+        <div id="postsList"></div>
+    </div>
+
+    <div id="sell" class="section">
+        <h2 id="t-publish-title" style="font-weight: 800;">انشر عرضك</h2>
+        <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+            <i class="fa-solid fa-image" style="font-size: 30px; color: #444;"></i>
+            <span id="t-upload-hint" style="font-size: 12px; color: #666; margin-top: 5px;">أضف صورة الحساب</span>
+            <img id="preview" style="display:none">
+        </div>
+        <input type="file" id="fileInput" accept="image/*" hidden onchange="handleImage(event)">
+        
+        <input type="text" id="gameCat" placeholder="اسم اللعبة">
+        <input type="number" id="price" placeholder="السعر المطلوب بـ DT">
+        <input type="tel" id="waPhone" placeholder="رقم واتساب">
+        <textarea id="desc" rows="3" placeholder="وصف الحساب..."></textarea>
+        <button class="btn-main" style="margin-top: 10px;" onclick="savePost()" id="t-save-post">نشر في السوق</button>
+    </div>
+
+    <div id="profile" class="section">
+        <div style="text-align:center; padding: 20px;">
+            <div style="width: 80px; height: 80px; background: var(--input-bg); border-radius: 50%; margin: 0 auto; display: flex; align-items: center; justify-content: center; border: 2px solid var(--primary);">
+                <i class="fa-solid fa-user-shield" style="font-size: 30px; color: var(--primary);"></i>
+            </div>
+            <h2 id="profile-name" style="margin: 10px 0 0 0;">المستخدم</h2>
+            <p id="profile-email" style="color:#666; font-size: 13px;"></p>
+        </div>
+        <h3 id="t-my-posts" style="margin-top: 20px;"><i class="fa-solid fa-list-check"></i> منشوراتي</h3>
+        <div id="myPostsList"></div>
+    </div>
+
+    <div id="settings" class="section">
+        <h2 id="t-settings-title">الإعدادات</h2>
+        <div style="background: var(--card); border-radius: 15px; padding: 10px;">
+            <div style="display:flex; justify-content:space-between; padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                <span id="t-dark-mode">الوضع الليلي</span>
+                <input type="checkbox" checked onchange="toggleTheme()">
+            </div>
+            
+            <div style="padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                <span id="t-lang-label">اللغة / Langue</span>
+                <select id="langSwitcher" onchange="changeLang(this.value)">
+                    <option value="ar">العربية</option>
+                    <option value="fr">Français</option>
+                    <option value="en">English</option>
+                </select>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; padding: 15px; color: #ff5252; cursor: pointer;" onclick="logout()">
+                <span id="t-logout">تسجيل الخروج</span>
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </div>
+        </div>
+    </div>
+
+    <nav class="nav">
+        <button class="nav-btn active-link" onclick="showPage('home', this)"><i class="fa-solid fa-house"></i></button>
+        <button class="nav-btn" onclick="showPage('sell', this)"><i class="fa-solid fa-square-plus"></i></button>
+        <button class="nav-btn" onclick="showPage('profile', this)"><i class="fa-solid fa-circle-user"></i></button>
+        <button class="nav-btn" onclick="showPage('settings', this)"><i class="fa-solid fa-gear"></i></button>
+    </nav>
+
+    <script>
+        let currentImg = "";
+        let sIndex = 0;
+
+        const translations = {
+            ar: {
+                authSub: "سوق اللاعبين الأسرع في تونس",
+                startBtn: "ابدأ الآن",
+                slide1: "ضمان 100% على جميع الحسابات",
+                slide2: "تواصل مباشر وسريع عبر واتساب",
+                search: "ابحث عن لعبة أو حساب...",
+                publish: "انشر عرضك",
+                upload: "أضف صورة الحساب",
+                save: "نشر في السوق",
+                myPosts: "منشوراتي",
+                settings: "الإعدادات",
+                darkMode: "الوضع الليلي",
+                langLabel: "اللغة",
+                logout: "تسجيل الخروج",
+                gamePlaceholder: "اسم اللعبة",
+                pricePlaceholder: "السعر المطلوب بـ DT",
+                phonePlaceholder: "رقم واتساب",
+                descPlaceholder: "وصف الحساب...",
+                waBtn: "تواصل عبر واتساب",
+                delete: "حذف العرض"
+            },
+            en: {
+                authSub: "Fastest Gaming Market in Tunisia",
+                startBtn: "Start Now",
+                slide1: "100% Guarantee on all accounts",
+                slide2: "Direct WhatsApp communication",
+                search: "Search for a game or account...",
+                publish: "Publish Offer",
+                upload: "Add Account Photo",
+                save: "Publish in Market",
+                myPosts: "My Posts",
+                settings: "Settings",
+                darkMode: "Dark Mode",
+                langLabel: "Language",
+                logout: "Logout",
+                gamePlaceholder: "Game Name",
+                pricePlaceholder: "Price in DT",
+                phonePlaceholder: "WhatsApp Number",
+                descPlaceholder: "Description...",
+                waBtn: "Contact via WhatsApp",
+                delete: "Delete"
+            },
+            fr: {
+                authSub: "Le marché gamer le plus rapide en Tunisie",
+                startBtn: "Démarrer",
+                slide1: "Garantie 100% sur tous les comptes",
+                slide2: "Contact direct via WhatsApp",
+                search: "Chercher un jeu ou un compte...",
+                publish: "Publier une offre",
+                upload: "Ajouter une photo",
+                save: "Publier",
+                myPosts: "Mes Annonces",
+                settings: "Paramètres",
+                darkMode: "Mode Sombre",
+                langLabel: "Langue",
+                logout: "Déconnexion",
+                gamePlaceholder: "Nom du jeu",
+                pricePlaceholder: "Prix en DT",
+                phonePlaceholder: "Numéro WhatsApp",
+                descPlaceholder: "Description...",
+                waBtn: "Contacter via WhatsApp",
+                delete: "Supprimer"
+            }
+        };
+
+        function changeLang(lang) {
+            localStorage.setItem('appLang', lang);
+            const t = translations[lang];
+            
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            document.body.style.textAlign = lang === 'ar' ? 'right' : 'left';
+
+            document.getElementById('t-auth-sub').innerText = t.authSub;
+            document.getElementById('t-start-btn').innerText = t.startBtn;
+            document.getElementById('t-slide1').innerText = t.slide1;
+            document.getElementById('t-slide2').innerText = t.slide2;
+            document.getElementById('searchInput').placeholder = t.search;
+            document.getElementById('t-publish-title').innerText = t.publish;
+            document.getElementById('t-upload-hint').innerText = t.upload;
+            document.getElementById('t-save-post').innerText = t.save;
+            document.getElementById('t-my-posts').innerHTML = `<i class="fa-solid fa-list-check"></i> ${t.myPosts}`;
+            document.getElementById('t-settings-title').innerText = t.settings;
+            document.getElementById('t-dark-mode').innerText = t.darkMode;
+            document.getElementById('t-lang-label').innerText = t.langLabel;
+            document.getElementById('t-logout').innerText = t.logout;
+            
+            document.getElementById('gameCat').placeholder = t.gamePlaceholder;
+            document.getElementById('price').placeholder = t.pricePlaceholder;
+            document.getElementById('waPhone').placeholder = t.phonePlaceholder;
+            document.getElementById('desc').placeholder = t.descPlaceholder;
+
+            renderPosts();
+            if(document.getElementById('profile').classList.contains('active')) renderMyPosts();
+        }
+
+        function register() {
+            const name = document.getElementById('reg-name').value;
+            const email = document.getElementById('reg-email').value;
+            if(!name || !email) return alert("Error");
+            localStorage.setItem('user', JSON.stringify({name, email}));
+            location.reload();
+        }
+
+        function loadUser() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if(user) {
+                document.getElementById('auth-screen').style.display = 'none';
+                document.getElementById('profile-name').innerText = user.name;
+                document.getElementById('profile-email').innerText = user.email;
+            }
+        }
+
+        function handleImage(e) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                currentImg = reader.result;
+                document.getElementById('preview').src = currentImg;
+                document.getElementById('preview').style.display = 'block';
+            };
+            reader.readAsDataURL(e.target.files[0]);
+        }
+
+        function savePost() {
+            const game = document.getElementById('gameCat').value;
+            const price = document.getElementById('price').value;
+            const phone = document.getElementById('waPhone').value;
+            const desc = document.getElementById('desc').value;
+            const user = JSON.parse(localStorage.getItem('user'));
+
+            if(!game || !price || !phone || !currentImg) return alert("!");
+
+            const posts = JSON.parse(localStorage.getItem('gamePosts') || "[]");
+            posts.unshift({ id: Date.now(), game, price, phone, desc, img: currentImg, user: user.name, email: user.email });
+            localStorage.setItem('gamePosts', JSON.stringify(posts));
+            location.reload();
+        }
+
+        function showPage(id, btn) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active-link'));
+            btn.classList.add('active-link');
+            if(id === 'profile') renderMyPosts();
+            window.scrollTo(0,0);
+        }
+
+        function renderPosts() {
+            const lang = localStorage.getItem('appLang') || 'ar';
+            const t = translations[lang];
+            const posts = JSON.parse(localStorage.getItem('gamePosts') || "[]");
+            const list = document.getElementById('postsList');
+            list.innerHTML = "";
+            posts.forEach(p => {
+                list.innerHTML += `
+                    <div class="card">
+                        <img class="card-img" src="${p.img}">
+                        <div class="card-content">
+                            <div style="display:flex; justify-content:space-between; align-items:center">
+                                <b style="font-size:18px">${p.game}</b>
+                                <span class="price">${p.price} DT</span>
+                            </div>
+                            <p style="font-size:14px">${p.desc}</p>
+                            <button class="btn-main btn-wa" onclick="window.open('https://wa.me/${p.phone}')">
+                                <i class="fa-brands fa-whatsapp"></i> ${t.waBtn}
+                            </button>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        function renderMyPosts() {
+            const lang = localStorage.getItem('appLang') || 'ar';
+            const t = translations[lang];
+            const user = JSON.parse(localStorage.getItem('user'));
+            const posts = JSON.parse(localStorage.getItem('gamePosts') || "[]");
+            const container = document.getElementById('myPostsList');
+            container.innerHTML = "";
+            posts.filter(p => p.email === user.email).forEach(p => {
+                container.innerHTML += `
+                    <div class="card">
+                        <img class="card-img" src="${p.img}">
+                        <div class="card-content">
+                            <div class="price">${p.price} DT</div>
+                            <b>${p.game}</b>
+                            <button class="btn-main" style="background:#ff5252; color:#fff; margin-top:10px;" onclick="deletePost(${p.id})">${t.delete}</button>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        function deletePost(id) {
+            let posts = JSON.parse(localStorage.getItem('gamePosts') || "[]");
+            posts = posts.filter(p => p.id !== id);
+            localStorage.setItem('gamePosts', JSON.stringify(posts));
+            location.reload();
+        }
+
+        function toggleTheme() { document.body.classList.toggle('light-mode'); }
+        function logout() { localStorage.removeItem('user'); location.reload(); }
+
+        window.onload = () => {
+            loadUser();
+            const savedLang = localStorage.getItem('appLang') || 'ar';
+            document.getElementById('langSwitcher').value = savedLang;
+            changeLang(savedLang);
+
+            setInterval(() => {
+                sIndex = (sIndex + 1) % 2;
+                document.getElementById('mainSlider').style.transform = `translateX(${sIndex * 100}%)`;
+            }, 4000);
+        };
+
+        function searchPosts() {
+            const q = document.getElementById('searchInput').value.toLowerCase();
+            document.querySelectorAll('#home .card').forEach(c => {
+                c.style.display = c.innerText.toLowerCase().includes(q) ? "" : "none";
+            });
+        }
+    </script>
+</body>
+</html>
